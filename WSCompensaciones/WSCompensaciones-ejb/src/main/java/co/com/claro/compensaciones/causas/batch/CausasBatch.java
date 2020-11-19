@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.com.claro.compensaciones.sintomas.batch;
+package co.com.claro.compensaciones.causas.batch;
 
 import co.com.claro.compensaciones.entity.CompCausas;
 import co.com.claro.compensaciones.listener.JobListener;
@@ -45,8 +45,13 @@ public class CausasBatch {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     @Bean
-    public FlatFileItemReader<CompCausas> reader(@Value("#{jobParameters[file]}") File file) {
+    public FlatFileItemReader<CompCausas> reader(@Value("#{jobParameters[File]}") String file) {
         return new FlatFileItemReaderBuilder<CompCausas>()
                 .name("CausasItemProcesador")
                 .resource(new FileSystemResource(file))
@@ -71,10 +76,7 @@ public class CausasBatch {
         return new CausasItemProcesadorValidador();
     }
 
-//    @Bean
-//    public CausasItemValidador validador() {
-//        return new CausasItemValidador();
-//    }
+    
     @Bean
     public JdbcBatchItemWriter<CompCausas> write(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<CompCausas>()
@@ -84,7 +86,7 @@ public class CausasBatch {
     }
 
     @Bean
-    public Job importCompEstadoJob(JobListener listener, Step step1, Step stepValidador) {
+    public Job importCompCausaJob(JobListener listener, Step step1, Step stepValidador) {
         return jobBuilderFactory.get("importCompEstadoJob")
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
@@ -95,20 +97,20 @@ public class CausasBatch {
     }
 
     @Bean
-    public Step step1(JdbcBatchItemWriter<CompCausas> write, File file) {
+    public Step step1(JdbcBatchItemWriter<CompCausas> write) {
         return stepBuilderFactory.get("step1")
                 .<CompCausas, CompCausas>chunk(10)
-                .reader(reader(file))
+                .reader(reader(null))
                 .processor(procesador())
                 .writer(write)
                 .build();
     }
 
     @Bean
-    public Step stepValidador( File file) {
+    public Step stepValidador() {
         return stepBuilderFactory.get("stepValidador")
                 .<CompCausas, CompCausas>chunk(10)
-                .reader(reader(file))
+                .reader(reader(null))
                 .processor(validador())
                 .build();
     }

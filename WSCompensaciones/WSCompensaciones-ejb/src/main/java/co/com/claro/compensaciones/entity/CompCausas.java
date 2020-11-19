@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -50,12 +51,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "CompCausas.findByTv", query = "SELECT c FROM CompCausas c WHERE c.tv = :tv")
     , @NamedQuery(name = "CompCausas.findByInt1", query = "SELECT c FROM CompCausas c WHERE c.int1 = :int1")
     , @NamedQuery(name = "CompCausas.findByTel", query = "SELECT c FROM CompCausas c WHERE c.tel = :tel")
-    , @NamedQuery(name = "CompCausas.valExist", query = "SELECT COUNT(c) FROM CompCausas c " +
-        "WHERE c.codCausa = :codCausa and c.idProblema = :idProblema and c.idCodigoAnomalia = :idCodigoAnomalia")
-        })
+    , @NamedQuery(name = "CompCausas.valExist", query = "SELECT COUNT(c) FROM CompCausas c "
+            + "WHERE c.codCausa = :codCausa and c.idProblema = :idProblema and c.idCodigoAnomalia = :idCodigoAnomalia")
+})
 public class CompCausas implements Serializable {
 
-private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -67,12 +68,13 @@ private static final long serialVersionUID = 1L;
             generator = "COMP_CAUSAS_SEQ")
     private Long idCausa;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "Debe ingresar Código de Anomalía")
+    @Size(message = "Debe ingresar un tamaño exacto", min = 1, max = 255)
+    @Pattern(message = "El Código Anomalía no permite caracteres especiales (*,$,#,%,etc...)", regexp = "[^a-zA-Z0-9\\u00f1\\u00d1]+")
     @Column(name = "COD_CAUSA")
-    private String codCausa;    
+    private String codCausa;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "Debe ingresar descrpcion de Anomalía")
     @Size(min = 1, max = 255)
     @Column(name = "DESCRPCION")
     private String descrpcion;
@@ -89,15 +91,15 @@ private static final long serialVersionUID = 1L;
     @Column(name = "FECHA_CREACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
-    
+
     @JoinColumn(name = "ID_ORIGEN", referencedColumnName = "ID_ORIGEN")
     @ManyToOne(optional = false)
     private CompOrigen idOrigen;
-    
+
     @JoinColumn(name = "ID_TIPO_ORIGEN", referencedColumnName = "ID_TIPO_ORIGEN")
     @ManyToOne(optional = false)
     private CompTipoOrigen idTipoOrigen;
-    
+
     @Column(name = "ID_CODIGO_ANOMALIA")
     private String idCodigoAnomalia;
     @Size(max = 255)
@@ -128,8 +130,8 @@ private static final long serialVersionUID = 1L;
     }
 
     public CompCausas(Long idCausa, String codCausa, String descrpcion, String estado,
-            String causas, String usuario, Date fechaCreacion, CompOrigen idOrigen, 
-            CompTipoOrigen idTipoOrigen, String idCodigoAnomalia, 
+            String causas, String usuario, Date fechaCreacion, CompOrigen idOrigen,
+            CompTipoOrigen idTipoOrigen, String idCodigoAnomalia,
             String descripcionCodigoAnomalia, String idProblema,
             String descripcionIdProblema, String tv, String int1, String tel) {
         this.idCausa = idCausa;
@@ -150,7 +152,6 @@ private static final long serialVersionUID = 1L;
         this.tel = tel;
     }
 
- 
     public Long getIdCausa() {
         return idCausa;
     }
