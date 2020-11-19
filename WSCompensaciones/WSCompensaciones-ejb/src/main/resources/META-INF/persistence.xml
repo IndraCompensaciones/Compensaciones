@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="gestionnew" transaction-type="JTA">
+        <jta-data-source>jdbc/OracleListas</jta-data-source>
+        <shared-cache-mode>NONE</shared-cache-mode>
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>co.com.claro.compensaciones.entity.CompAjusteServicio</class>
+        <class>co.com.claro.compensaciones.entity.CompAjusteServicioPK</class>
+        <class>co.com.claro.compensaciones.entity.CompAjustes</class>
+        <class>co.com.claro.compensaciones.entity.CompConstantes</class>
+        <class>co.com.claro.compensaciones.entity.CompEstratos</class>
+        <class>co.com.claro.compensaciones.entity.CompServicios</class>
+        <class>co.com.claro.compensaciones.entity.CompWebservices</class>
+        <class>co.com.claro.compensaciones.entity.CompCompensacionConfig</class>
+        <class>co.com.claro.compensaciones.entity.CompAjustesAud</class>
+        <class>co.com.claro.compensaciones.entity.CompCausasAud</class>
+        <class>co.com.claro.compensaciones.entity.CompCausaServicio</class>
+        <class>co.com.claro.compensaciones.entity.CompCausaServicioPK</class>
+        <class>co.com.claro.compensaciones.entity.CompEstratoAjuste</class>
+        <class>co.com.claro.compensaciones.entity.CompEstratoAjustePK</class>
+        <class>co.com.claro.compensaciones.entity.CompMaximo</class>
+        <class>co.com.claro.compensaciones.entity.CompFtp</class>
+        <class>co.com.claro.compensaciones.entity.CompEstado</class>
+        <class>co.com.claro.compensaciones.entity.CompEstadoSistema</class>
+        <class>co.com.claro.compensaciones.entity.CompSintomas</class>
+        <class>co.com.claro.compensaciones.entity.CompSintomasServicio</class>
+        <class>co.com.claro.compensaciones.entity.CompSintomasServicioPK</class>
+        <class>co.com.claro.compensaciones.entity.CompInicioSesionAud</class>
+        <class>co.com.claro.compensaciones.entity.CompObservaciones</class>
+        <class>co.com.claro.compensaciones.entity.CompPrioridades</class>
+        <class>co.com.claro.compensaciones.entity.CompLogTransaccional</class>
+        <class>co.com.claro.compensaciones.entity.CompCausas</class>
+        <class>co.com.claro.compensaciones.entity.CompMaximoV2</class>
+        <class>co.com.claro.compensaciones.entity.CompOrigen</class>
+        <class>co.com.claro.compensaciones.entity.CompNodosV2</class>
+        <class>co.com.claro.compensaciones.entity.CompTipoOrigen</class>
+        <class>co.com.claro.compensaciones.entity.VwValidacionNodos</class>
+        <class>co.com.claro.compensaciones.entity.VwNodosFinales</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="maximo" transaction-type="JTA">
+        <jta-data-source>jdbc/Maximo</jta-data-source>
+        <class>co.com.claro.compensaciones.entity.DualMaximo</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>
