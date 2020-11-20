@@ -10,10 +10,14 @@ import co.com.claro.compensaciones.listener.JobListener;
 import co.com.claro.compensaciones.procesador.CausasItemProcesador;
 import co.com.claro.compensaciones.procesador.CausasItemProcesadorValidador;
 import co.com.claro.compensaciones.dto.CompCausasCargueDto;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -21,6 +25,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.item.database.JpaItemWriter;
 
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -37,12 +42,15 @@ import org.springframework.core.io.FileSystemResource;
  */
 @Configuration
 @EnableBatchProcessing
-public class CausasBatch {
+public class CausasBatch extends DefaultBatchConfigurer {
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
+
+//    @PersistenceContext(unitName = "gestionnew")
+//    private EntityManager entityManager;
 
     /**
      *
@@ -78,17 +86,21 @@ public class CausasBatch {
     }
 
 //    @Bean
-//    public JpaItemWriter writer
-    @Bean
-    public JdbcBatchItemWriter<CompCausas> write(DataSource dataSource) {
-        return new JdbcBatchItemWriterBuilder<CompCausas>()
-                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<CompCausas>())
-                .sql("INSERT INTO COMP_ESTADO (ID_ESTADOS, DESCRIPCION, PROCESO, FECHA_CREACION) VALUES (:idEstados, :descripcion, :proceso, :fechaCreacion,)")
-                .dataSource(dataSource).build();
-    }
+//    public JpaItemWriter<CompCausas> writer() {
+//        JpaItemWriter writer = new JpaItemWriter();
+//        writer.setEntityManagerFactory(entityManager.getEntityManagerFactory());
+//        return writer;
+//    }
 
+//    @Bean
+//    public JdbcBatchItemWriter<CompCausas> write(DataSource dataSource) {
+//        return new JdbcBatchItemWriterBuilder<CompCausas>()
+//                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<CompCausas>())
+//                .sql("INSERT INTO COMP_ESTADO (ID_ESTADOS, DESCRIPCION, PROCESO, FECHA_CREACION) VALUES (:idEstados, :descripcion, :proceso, :fechaCreacion,)")
+//                .dataSource(dataSource).build();
+//    }
     @Bean
-    public Job importCompCausaJob(JobListener listener, Step step1, Step stepValidador) {
+    public Job importCompCausaJob(JobListener listener, Step stepValidador, Step step1) {
         return jobBuilderFactory.get("importCompEstadoJob")
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
@@ -99,19 +111,19 @@ public class CausasBatch {
     }
 
     @Bean
-    public Step step1(JdbcBatchItemWriter<CompCausas> write) {
+    public Step step1(JpaItemWriter<CompCausas> writer) {
         return stepBuilderFactory.get("step1")
-                .<CompCausasCargueDto, CompCausas>chunk(10)
+                .<CompCausasCargueDto, CompCausas>chunk(3000)
                 .reader(reader(null))
                 .processor(procesador())
-                .writer(write)
+                //.writer(writer)
                 .build();
     }
 
     @Bean
     public Step stepValidador() {
         return stepBuilderFactory.get("stepValidador")
-                .<CompCausasCargueDto, CompCausas>chunk(10)
+                .<CompCausasCargueDto, CompCausas>chunk(3000)
                 .reader(reader(null))
                 .processor(validador())
                 .build();

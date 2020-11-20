@@ -33,7 +33,6 @@ public class CausasItemProcesadorValidador implements ItemProcessor<CompCausasCa
 
     @OnProcessError
     void onProcessError(CompCausas item, Exception e) {
-
         LOG.error("Exception occurred in input validation at the {} th item. [message:{}]", item.getIdCausa(), e.getMessage());
     }
 }
