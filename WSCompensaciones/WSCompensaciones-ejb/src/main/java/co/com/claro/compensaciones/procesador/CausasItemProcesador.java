@@ -9,19 +9,18 @@ import co.com.claro.compensaciones.entity.CompCausas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
-
+import co.com.claro.compensaciones.dto.CompCausasCargueDto;
 /**
  *
  * @author Administrador
  */
-public class CausasItemProcesador implements ItemProcessor<CompCausas, CompCausas> {
+public class CausasItemProcesador implements ItemProcessor<CompCausasCargueDto, CompCausas> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CausasItemProcesador.class);
 
     @Override
-    public CompCausas process(CompCausas i) throws Exception {
-        CompCausas causa = new CompCausas();
-        causa = i;
+    public CompCausas process(CompCausasCargueDto i) throws Exception {
+        CompCausas causa = i.modificarObjeto(i);
         LOG.info("convertido (" + i + ") a (" + causa + ")");
         return causa;
     }

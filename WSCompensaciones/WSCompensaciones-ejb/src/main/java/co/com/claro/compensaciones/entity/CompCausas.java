@@ -25,6 +25,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -57,6 +59,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CompCausas implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Getter
+    @Setter
     @Id
     @Basic(optional = false)
     @NotNull
@@ -67,57 +71,85 @@ public class CompCausas implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO,
             generator = "COMP_CAUSAS_SEQ")
     private Long idCausa;
+    @Getter
+    @Setter
     @Basic(optional = false)
     @NotNull(message = "Debe ingresar Código de Anomalía")
     @Size(message = "Debe ingresar un tamaño exacto", min = 1, max = 255)
     @Pattern(message = "El Código Anomalía no permite caracteres especiales (*,$,#,%,etc...)", regexp = "[^a-zA-Z0-9\\u00f1\\u00d1]+")
     @Column(name = "COD_CAUSA")
     private String codCausa;
+    @Getter
+    @Setter
     @Basic(optional = false)
     @NotNull(message = "Debe ingresar descrpcion de Anomalía")
     @Size(min = 1, max = 255)
     @Column(name = "DESCRPCION")
     private String descrpcion;
+    @Getter
+    @Setter
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "ESTADO")
     private String estado;
+    @Getter
+    @Setter
     @Column(name = "CAUSAS")
     private String causas;
+    @Getter
+    @Setter
     @Size(max = 30)
     @Column(name = "USUARIO")
     private String usuario;
+    @Getter
+    @Setter
     @Column(name = "FECHA_CREACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
-
+    @Getter
+    @Setter
     @JoinColumn(name = "ID_ORIGEN", referencedColumnName = "ID_ORIGEN")
     @ManyToOne(optional = false)
     private CompOrigen idOrigen;
-
+    @Getter
+    @Setter
     @JoinColumn(name = "ID_TIPO_ORIGEN", referencedColumnName = "ID_TIPO_ORIGEN")
     @ManyToOne(optional = false)
     private CompTipoOrigen idTipoOrigen;
-
+    @Getter
+    @Setter
     @Column(name = "ID_CODIGO_ANOMALIA")
     private String idCodigoAnomalia;
     @Size(max = 255)
     @Column(name = "DESCRIPCION_CODIGO_ANOMALIA")
+    @Getter
+    @Setter
     private String descripcionCodigoAnomalia;
     @Basic(optional = false)
     @Size(min = 1, max = 255)
     @Column(name = "ID_PROBLEMA")
+    @Getter
+    @Setter
     private String idProblema;
     @Size(max = 255)
     @Column(name = "DESCRIPCION_ID_PROBLEMA")
+    @Getter
+    @Setter
     private String descripcionIdProblema;
     @Size(max = 10)
     @Column(name = "TV")
+    @Getter
+    @Setter
     private String tv;
+    @Getter
+    @Setter
     @Size(max = 10)
     @Column(name = "INT")
+    
     private String int1;
+    @Getter
+    @Setter
     @Size(max = 10)
     @Column(name = "TEL")
     private String tel;
@@ -152,133 +184,7 @@ public class CompCausas implements Serializable {
         this.tel = tel;
     }
 
-    public Long getIdCausa() {
-        return idCausa;
-    }
-
-    public void setIdCausa(Long idCausa) {
-        this.idCausa = idCausa;
-    }
-
-    public String getCodCausa() {
-        return codCausa;
-    }
-
-    public void setCodCausa(String codCausa) {
-        this.codCausa = codCausa;
-    }
-
-    public String getDescrpcion() {
-        return descrpcion;
-    }
-
-    public void setDescrpcion(String descrpcion) {
-        this.descrpcion = descrpcion;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public CompTipoOrigen getIdTipoOrigen() {
-        return idTipoOrigen;
-    }
-
-    public void setIdTipoOrigen(CompTipoOrigen idTipoOrigen) {
-        this.idTipoOrigen = idTipoOrigen;
-    }
-
-    public String getCausas() {
-        return causas;
-    }
-
-    public void setCausas(String causas) {
-        this.causas = causas;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public CompOrigen getIdOrigen() {
-        return idOrigen;
-    }
-
-    public void setIdOrigen(CompOrigen idOrigen) {
-        this.idOrigen = idOrigen;
-    }
-
-    public String getIdCodigoAnomalia() {
-        return idCodigoAnomalia;
-    }
-
-    public void setIdCodigoAnomalia(String idCodigoAnomalia) {
-        this.idCodigoAnomalia = idCodigoAnomalia;
-    }
-
-    public String getDescripcionCodigoAnomalia() {
-        return descripcionCodigoAnomalia;
-    }
-
-    public void setDescripcionCodigoAnomalia(String descripcionCodigoAnomalia) {
-        this.descripcionCodigoAnomalia = descripcionCodigoAnomalia;
-    }
-
-    public String getIdProblema() {
-        return idProblema;
-    }
-
-    public void setIdProblema(String idProblema) {
-        this.idProblema = idProblema;
-    }
-
-    public String getDescripcionIdProblema() {
-        return descripcionIdProblema;
-    }
-
-    public void setDescripcionIdProblema(String descripcionIdProblema) {
-        this.descripcionIdProblema = descripcionIdProblema;
-    }
-
-    public String getTv() {
-        return tv;
-    }
-
-    public void setTv(String tv) {
-        this.tv = tv;
-    }
-
-    public String getInt1() {
-        return int1;
-    }
-
-    public void setInt1(String int1) {
-        this.int1 = int1;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
+ 
 
     @Override
     public int hashCode() {

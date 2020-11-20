@@ -6,7 +6,6 @@
 package co.com.claro.compensaciones.causas.queue;
 
 import co.com.claro.compensaciones.causas.batch.DemoSpringBatchApplication;
-import co.com.claro.compensaciones.queue.CargueArchivoQueue;
 import co.com.claro.compensaciones.utility.NumberConstants;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +42,7 @@ public class JMSCausaCompensaciones implements MessageListener {
                 BatchStatus batchStatus= demo.run(list, archivo);
             }
         } catch (JMSException ex) {
-            Logger.getLogger(CargueArchivoQueue.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JMSCausaCompensaciones.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(JMSCausaCompensaciones.class.getName()).log(Level.SEVERE, null, ex);
         }

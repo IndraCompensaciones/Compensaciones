@@ -5,10 +5,9 @@
  */
 package co.com.claro.compensaciones.procesador;
 
+import co.com.claro.compensaciones.dto.CompCausasCargueDto;
 import co.com.claro.compensaciones.entity.CompCausas;
-import java.util.Set;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.annotation.OnProcessError;
@@ -19,16 +18,17 @@ import org.springframework.batch.item.validator.Validator;
  *
  * @author Administrador
  */
-public class CausasItemProcesadorValidador implements ItemProcessor<CompCausas, CompCausas> {
+public class CausasItemProcesadorValidador implements ItemProcessor<CompCausasCargueDto, CompCausas> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CausasItemProcesadorValidador.class);
     @Inject
     private Validator<CompCausas> validator;
 
     @Override
-    public CompCausas process(CompCausas i) throws Exception {
-        validator.validate(i);
-        return i;
+    public CompCausas process(CompCausasCargueDto i) throws Exception {
+        CompCausas causa = i.modificarObjeto(i);
+        validator.validate(causa);
+        return causa;
     }
 
     @OnProcessError

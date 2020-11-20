@@ -9,8 +9,7 @@ import co.com.claro.compensaciones.entity.CompCausas;
 import co.com.claro.compensaciones.listener.JobListener;
 import co.com.claro.compensaciones.procesador.CausasItemProcesador;
 import co.com.claro.compensaciones.procesador.CausasItemProcesadorValidador;
-import co.com.claro.compensaciones.validador.CausasItemValidador;
-import java.io.File;
+import co.com.claro.compensaciones.dto.CompCausasCargueDto;
 import javax.sql.DataSource;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
@@ -22,6 +21,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
+
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
@@ -29,7 +29,6 @@ import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 
 /**
@@ -51,15 +50,17 @@ public class CausasBatch {
      * @return
      */
     @Bean
-    public FlatFileItemReader<CompCausas> reader(@Value("#{jobParameters[File]}") String file) {
-        return new FlatFileItemReaderBuilder<CompCausas>()
+    public FlatFileItemReader<CompCausasCargueDto> reader(@Value("#{jobParameters[File]}") String file) {
+        return new FlatFileItemReaderBuilder<CompCausasCargueDto>()
                 .name("CausasItemProcesador")
                 .resource(new FileSystemResource(file))
                 .delimited()
-                .names(new String[]{"idEstados", "descripcion", "proceso", "fechaCreacion"})
-                .fieldSetMapper(new BeanWrapperFieldSetMapper<CompCausas>() {
+                .names(new String[]{"codigoAnomalia", "DescripcionAnomalia", "codigoProblema",
+            "descripcionProblema", "codigoCausa", "DescripcionCausa", "origen",
+            "estado", "tipo", "internet", "tv", "telefonia"})
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<CompCausasCargueDto>() {
                     {
-                        setTargetType(CompCausas.class);
+                        setTargetType(CompCausasCargueDto.class);
                     }
                 })
                 .build();
@@ -76,7 +77,8 @@ public class CausasBatch {
         return new CausasItemProcesadorValidador();
     }
 
-    
+//    @Bean
+//    public JpaItemWriter writer
     @Bean
     public JdbcBatchItemWriter<CompCausas> write(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<CompCausas>()
@@ -99,7 +101,7 @@ public class CausasBatch {
     @Bean
     public Step step1(JdbcBatchItemWriter<CompCausas> write) {
         return stepBuilderFactory.get("step1")
-                .<CompCausas, CompCausas>chunk(10)
+                .<CompCausasCargueDto, CompCausas>chunk(10)
                 .reader(reader(null))
                 .processor(procesador())
                 .writer(write)
@@ -109,7 +111,7 @@ public class CausasBatch {
     @Bean
     public Step stepValidador() {
         return stepBuilderFactory.get("stepValidador")
-                .<CompCausas, CompCausas>chunk(10)
+                .<CompCausasCargueDto, CompCausas>chunk(10)
                 .reader(reader(null))
                 .processor(validador())
                 .build();
