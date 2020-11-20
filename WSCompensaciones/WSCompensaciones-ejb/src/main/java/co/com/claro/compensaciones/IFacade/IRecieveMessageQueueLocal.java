@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.com.claro.compensaciones.facade;
+package co.com.claro.compensaciones.IFacade;
+
+import co.com.claro.compensaciones.classes.QueueParameter;
 
 /**
  *
  * @author mamorera
  */
-public class test {
+public interface IRecieveMessageQueueLocal {
+    
+    public void readMessages(QueueParameter queueParameters);
     
 }

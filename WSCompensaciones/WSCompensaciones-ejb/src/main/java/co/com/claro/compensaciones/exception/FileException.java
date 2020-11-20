@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.com.claro.compensaciones.sintomas.queue;
+package co.com.claro.compensaciones.exception;
 
 /**
  *
  * @author mamorera
  */
-public class test {
+public class FileException extends Exception{
+    
+    public FileException(String message){
+        super(message);
+    }
     
 }
